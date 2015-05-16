@@ -12,22 +12,28 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.List;
+
+import br.com.caelum.cadastro.dao.AlunoDao;
+import br.com.caelum.cadastro.modelo.Aluno;
+
 
 public class ListaAlunosActivity extends Activity {
 
     private ListView listaAlunos;
 
+    private List<Aluno> alunos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_alunos);
-        String[] alunos=new String[]{"Anderson", "Filipe", "Guilherme"};
+
+        AlunoDao dao=new AlunoDao(this);
+
+        this.alunos=dao.getLista();
 
         this.listaAlunos = (ListView) findViewById(R.id.lista_alunos);
-
-        final ArrayAdapter<String> adapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, alunos);
-
-        listaAlunos.setAdapter(adapter);
 
         listaAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -39,8 +45,8 @@ public class ListaAlunosActivity extends Activity {
         listaAlunos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                String aluno = (String)parent.getItemAtPosition(position);
-                Toast.makeText(ListaAlunosActivity.this, "Clique longo: " + aluno, Toast.LENGTH_LONG).show();
+                Aluno aluno = (Aluno)parent.getItemAtPosition(position);
+                Toast.makeText(ListaAlunosActivity.this, "Clique longo: " + aluno.getId(), Toast.LENGTH_LONG).show();
                 return false;
             }
         });
@@ -54,7 +60,20 @@ public class ListaAlunosActivity extends Activity {
                 startActivity(intent);
             }
         });
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.carregaLista();
+    }
+
+    private void carregaLista() {
+        AlunoDao dao=new AlunoDao(this);
+        List<Aluno> alunos=dao.getLista();
+        dao.close();
+        final ArrayAdapter<Aluno> adapter=new ArrayAdapter<Aluno>(this, android.R.layout.simple_list_item_1, alunos);
+        this.listaAlunos.setAdapter(adapter);
     }
 
     @Override

@@ -9,8 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import br.com.caelum.cadastro.dao.AlunoDao;
+import br.com.caelum.cadastro.modelo.Aluno;
+
 
 public class FormularioActivity extends AppCompatActivity {
+
+    private FormularioHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +27,11 @@ public class FormularioActivity extends AppCompatActivity {
         botao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(FormularioActivity.this, "Voce clicou no botao", Toast.LENGTH_LONG).show();
                 finish();
             }
         });
+
+        this.helper = new FormularioHelper(this);
     }
 
     @Override
@@ -39,7 +45,16 @@ public class FormularioActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_formulario_ok:
-                Toast.makeText(this, "Ok clicado", Toast.LENGTH_LONG).show();
+
+                if(helper.temNome()) {
+                    Aluno aluno = helper.pegaAlunoDoFormulario();
+                    AlunoDao dao=new AlunoDao(this);
+                    dao.inserir(aluno);
+                    dao.close();
+                } else {
+                    helper.mostraErro();
+                }
+
                 finish();
                 return false;
             default:

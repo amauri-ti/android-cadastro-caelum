@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/lista_alunos"
-        android:background="#ff93afc3" />
+        android:background="#ffbac38f" />
 
     <Button
         android:id="@+id/lista_alunos_floating_button"
