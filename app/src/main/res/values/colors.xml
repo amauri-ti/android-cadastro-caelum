@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="linha_par">#E6E655</color>
+    <color name="linha_impar">#DEC63C</color>
+
+</resources>
