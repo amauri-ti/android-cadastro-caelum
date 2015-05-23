@@ -1,15 +1,19 @@
 package br.com.caelum.cadastro.modelo;
 
+import java.io.Serializable;
+
 /**
  * Created by android5044 on 16/05/15.
  */
-public class Aluno {
+public class Aluno implements Serializable {
+
     private String nome;
     private String telefone;
     private String endereco;
     private String site;
     private Double nota;
     private Long id;
+    private String caminhoFoto;
 
     public String getNome() {
         return nome;
@@ -59,18 +63,26 @@ public class Aluno {
         this.id = id;
     }
 
+    public String getCaminhoFoto() {
+        return caminhoFoto;
+    }
+
+    public void setCaminhoFoto(String caminhoFoto) {
+        this.caminhoFoto = caminhoFoto;
+    }
+
     @Override
     public String toString() {
 
         String nomeFormatado;
 
-        if(nome.length() > 8) {
-            nomeFormatado = nome.substring(0, 8) + "...";
+        if(nome.length() > 9) {
+            nomeFormatado = nome.substring(0, 8) + " ...";
         } else {
             nomeFormatado = nome;
         }
 
-        return nomeFormatado + "("+site+")";
+        return nomeFormatado + site != null ? " ("+site+")" : "";
     }
 }
 

@@ -1,6 +1,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".ListaAlunosActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/ligar"
+        android:title="Ligar" />
+
+    <item
+        android:id="@+id/sms"
+        android:title="Enviar SMS" />
+
+    <item
+        android:id="@+id/mapa"
+        android:title="Achar no Mapa" />
+
+    <item
+        android:id="@+id/site"
+        android:title="Navegar no Site" />
+
+    <item
+        android:id="@+id/deletar"
+        android:title="Deletar" />
+
 </menu>

@@ -1,8 +1,13 @@
 package br.com.caelum.cadastro;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +19,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import br.com.caelum.cadastro.adapter.SpecialAdapter;
 import br.com.caelum.cadastro.dao.AlunoDao;
 import br.com.caelum.cadastro.modelo.Aluno;
 
@@ -35,6 +41,19 @@ public class ListaAlunosActivity extends Activity {
 
         this.listaAlunos = (ListView) findViewById(R.id.lista_alunos);
 
+        listaAlunos.setBackgroundColor(Color.RED);
+
+        listaAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent edicao=new Intent(ListaAlunosActivity.this, FormularioActivity.class);
+                Aluno aluno= (Aluno) listaAlunos.getItemAtPosition(position);
+                edicao.putExtra("aluno", aluno);
+                startActivity(edicao);
+            }
+        });
+
+        /*
         listaAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -50,6 +69,7 @@ public class ListaAlunosActivity extends Activity {
                 return false;
             }
         });
+        */
 
         Button botaoAdiciona = (Button) findViewById(R.id.lista_alunos_floating_button);
 
@@ -60,6 +80,8 @@ public class ListaAlunosActivity extends Activity {
                 startActivity(intent);
             }
         });
+
+        registerForContextMenu(listaAlunos);
     }
 
     @Override
@@ -72,29 +94,72 @@ public class ListaAlunosActivity extends Activity {
         AlunoDao dao=new AlunoDao(this);
         List<Aluno> alunos=dao.getLista();
         dao.close();
-        final ArrayAdapter<Aluno> adapter=new ArrayAdapter<Aluno>(this, android.R.layout.simple_list_item_1, alunos);
+        final SpecialAdapter<Aluno> adapter=new SpecialAdapter<Aluno>(this, android.R.layout.simple_list_item_1, alunos);
         this.listaAlunos.setAdapter(adapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_lista_alunos, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void registerForContextMenu(View view) {
+        super.registerForContextMenu(view);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        final Aluno alunoSelecionado = (Aluno) listaAlunos.getAdapter().getItem(info.position);
+        MenuItem ligar = menu.add("Ligar");
+        Intent intentLigar=new Intent(Intent.ACTION_CALL);
+        intentLigar.setData(Uri.parse("tel:"+alunoSelecionado.getTelefone()));
+        ligar.setIntent(intentLigar);
+        MenuItem sms = menu.add("Enviar SMS");
+        Intent intentSms=new Intent(Intent.ACTION_VIEW);
+        intentSms.setData(Uri.parse("sms:"+alunoSelecionado.getTelefone()));
+        intentSms.putExtra("sms_body", "Mensagem");
+        sms.setIntent(intentSms);
+        MenuItem mapa = menu.add("Achar no Mapa");
+        Intent intentMapa = new Intent(Intent.ACTION_VIEW);
+        intentMapa.setData(Uri.parse("geo:0,0?z=14&q="+Uri.encode(alunoSelecionado.getEndereco())));
+        mapa.setIntent(intentMapa);
+        MenuItem site = menu.add("Navegar no Site");
+        Intent intentSite = new Intent(Intent.ACTION_VIEW);
+        String siteAluno = alunoSelecionado.getSite();
+        if(!siteAluno.startsWith("http://")) {
+            siteAluno = "http://"+siteAluno;
+        }
+        intentSite.setData(Uri.parse(siteAluno));
+        site.setIntent(intentSite);
+        MenuItem deletar = menu.add("Deletar");
+        deletar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                new AlertDialog.Builder(ListaAlunosActivity.this)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Deletar")
+                        .setMessage("Deseja mesmo deletar?")
+                        .setPositiveButton("Quero",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        AlunoDao dao=new AlunoDao(ListaAlunosActivity.this);
+                                        dao.apagar(alunoSelecionado);
+                                        dao.close();
+                                        carregaLista();
+                                    }
+                                }).setNegativeButton("Nao", null).show();
+                return false;
+            }
+        });
+
     }
 }
