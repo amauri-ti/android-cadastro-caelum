@@ -21,6 +21,7 @@ import br.com.caelum.cadastro.adapter.ListaAlunosAdapter;
 import br.com.caelum.cadastro.adapter.SpecialAdapter;
 import br.com.caelum.cadastro.converter.AlunoConverter;
 import br.com.caelum.cadastro.dao.AlunoDao;
+import br.com.caelum.cadastro.fragment.MapaFragment;
 import br.com.caelum.cadastro.modelo.Aluno;
 import br.com.caelum.cadastro.support.WebClient;
 import br.com.caelum.cadastro.task.EnviaContatosTask;
@@ -115,6 +116,14 @@ public class ListaAlunosActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_enviar_notas:
                 new EnviaContatosTask(this).execute();
+                return true;
+            case R.id.menu_receber_provas:
+                Intent provas = new Intent(this, ProvasActivity.class);
+                startActivity(provas);
+                return true;
+            case R.id.menu_mapa:
+                Intent mapa = new Intent(this, MostraAlunosActivity.class);
+                startActivity(mapa);
                 return true;
         }
         return super.onOptionsItemSelected(item);
