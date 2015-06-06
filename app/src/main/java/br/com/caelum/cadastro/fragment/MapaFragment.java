@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 
 import br.com.caelum.cadastro.dao.AlunoDao;
+import br.com.caelum.cadastro.location.AtualizadorDeLocalizacao;
 import br.com.caelum.cadastro.modelo.Aluno;
 import br.com.caelum.cadastro.util.Localizador;
 
@@ -45,6 +46,7 @@ public class MapaFragment extends SupportMapFragment {
             }
         }
 
+        AtualizadorDeLocalizacao atualizador = new AtualizadorDeLocalizacao(getActivity(), this);
         //Log.i("MAPA", "Coordenadas da Caelum: " + local);
     }
 

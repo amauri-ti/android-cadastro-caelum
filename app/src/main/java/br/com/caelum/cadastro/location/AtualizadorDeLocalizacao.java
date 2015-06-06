@@ -7,6 +7,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import br.com.caelum.cadastro.fragment.MapaFragment;
@@ -19,7 +20,7 @@ public class AtualizadorDeLocalizacao implements LocationListener {
     private MapaFragment mapa;
     private GoogleApiClient client;
 
-    public AtualizadorDeLocalizacao(Context context) {
+    public AtualizadorDeLocalizacao(Context context, MapaFragment mapa) {
         this.mapa = mapa;
         Configurador config = new Configurador(this);
         this.client = new GoogleApiClient.Builder(context)
