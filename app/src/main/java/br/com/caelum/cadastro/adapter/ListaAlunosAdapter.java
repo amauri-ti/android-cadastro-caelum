@@ -67,9 +67,18 @@ public class ListaAlunosAdapter extends BaseAdapter {
             foto.setImageBitmap(bm);
         }
 
-        view.setBackgroundColor(position % 2 ==0 ?
+        view.setBackgroundColor(position % 2 == 0 ?
                 activity.getResources().getColor(R.color.linha_par) :
                 activity.getResources().getColor(R.color.linha_impar));
+
+        //Tratamento para landscape
+        TextView telefone = (TextView) view.findViewById(R.id.item_telefone);
+        TextView site = (TextView) view.findViewById(R.id.item_site);
+
+        if(telefone != null && site != null) {
+            telefone.setText(aluno.getTelefone());
+            site.setText(aluno.getSite());
+        }
 
         return view;
     }

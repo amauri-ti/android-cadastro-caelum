@@ -54,7 +54,7 @@ public class AlunoDao extends SQLiteOpenHelper {
         values.put("telefone", aluno.getTelefone());
         values.put("endereco", aluno.getEndereco());
         values.put("site", aluno.getSite());
-        values.put("nota", aluno.getNome());
+        values.put("nota", aluno.getNota());
         values.put("caminhoFoto", aluno.getCaminhoFoto());
 
         getWritableDatabase().insert(TABELA, null, values);
@@ -66,7 +66,7 @@ public class AlunoDao extends SQLiteOpenHelper {
         values.put("telefone", aluno.getTelefone());
         values.put("endereco", aluno.getEndereco());
         values.put("site", aluno.getSite());
-        values.put("nota", aluno.getNome());
+        values.put("nota", aluno.getNota());
         values.put("caminhoFoto", aluno.getCaminhoFoto());
 
         getWritableDatabase().update(TABELA, values, "id=?", new String[] {aluno.getId().toString()});
@@ -96,5 +96,15 @@ public class AlunoDao extends SQLiteOpenHelper {
         }
         c.close();
         return alunos;
+    }
+
+    public boolean isAluno(String telefone) {
+        String[] parametros = {telefone};
+        Cursor rawQuery = getReadableDatabase()
+                .rawQuery("SELECT telefone FROM " + TABELA
+                + " WHERE telefone = ?", parametros);
+        int total = rawQuery.getCount();
+        rawQuery.close();
+        return total > 0;
     }
 }

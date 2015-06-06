@@ -49,8 +49,9 @@ public class FormularioHelper {
         endereco.setText(aluno.getEndereco());
         site.setText(aluno.getSite());
         telefone.setText(aluno.getTelefone());
-        nota.setProgress(aluno.getNota().intValue());
+        nota.setRating(aluno.getNota().floatValue());
         foto.setImageBitmap(BitmapFactory.decodeFile(aluno.getCaminhoFoto()));
+        foto.setTag(aluno.getCaminhoFoto());
         this.aluno = aluno;
     }
 

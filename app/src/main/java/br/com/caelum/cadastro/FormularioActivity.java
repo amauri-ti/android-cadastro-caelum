@@ -100,10 +100,10 @@ public class FormularioActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        /*switch (item.getItemId()) {
             case R.id.deletar:
                 break;
-        }
+        }*/
         return super.onContextItemSelected(item);
     }
 
