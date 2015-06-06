@@ -48,7 +48,7 @@ public class MapaFragment extends SupportMapFragment {
         //Log.i("MAPA", "Coordenadas da Caelum: " + local);
     }
 
-    private void centralizaNo(LatLng local) {
+    public void centralizaNo(LatLng local) {
         GoogleMap mapa=this.getMap();
         mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(local, 14));
     }
